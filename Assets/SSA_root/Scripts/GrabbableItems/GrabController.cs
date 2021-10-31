@@ -10,22 +10,23 @@ public class GrabController : MonoBehaviour, IGrabbableItem
     public event EventHandler OnItemDropped;
 
 
-    [SerializeField] protected float f_pickupRange;
+    //[SerializeField] protected float f_pickupRange;
     [SerializeField] protected float f_dropForwardForce;
     [SerializeField] protected float f_dropUpwardForce;
 
     private bool b_isEquipped;
-    private static bool b_slotFull;
+    
 
     private Rigidbody rb_itemRigidbody;
     private BoxCollider c_itemCollider;
+    private GameObject t_player;
 
-    [SerializeField] protected Transform t_player;
-    [SerializeField] protected Transform t_hand;
+    [SerializeField] protected Transform t_righthand, t_lefthand;
     [SerializeField] protected Transform t_camera;
        
     private void Awake()
     {
+        t_player = GameObject.FindGameObjectWithTag("Player");
         rb_itemRigidbody = GetComponent<Rigidbody>();
         c_itemCollider = GetComponent<BoxCollider>();
     }
@@ -42,45 +43,38 @@ public class GrabController : MonoBehaviour, IGrabbableItem
         {
             rb_itemRigidbody.isKinematic = true;
             c_itemCollider.isTrigger = true;
-            b_slotFull = true;
+            //b_slotFull = true;
         }
+
+        
     }
 
     private void Update()
     {
-        //Check if player is in range and "E" is pressed
-        Vector3 distanceToPlayer = t_player.position - transform.position;
-        if (!b_isEquipped && distanceToPlayer.magnitude <= f_pickupRange && Input.GetKeyDown(KeyCode.E) && !b_slotFull)
-        {
-            GrabItem();
-           
-        }
+        SetWeaponPosition();
+    }
 
-        //Drop if equipped and "Q" is pressed
-        if (b_isEquipped && Input.GetKeyDown(KeyCode.Q))
+    private void SetWeaponPosition()
+    {
+        //Drop if equipped and "G" is pressed
+        if (b_isEquipped && Input.GetKeyDown(KeyCode.G))
         {
             DropItem();
         }
     }
 
- 
-
-
-
-    public void GrabItem()
+    public void GrabItem(Transform t_hand)
     {
         OnItemGrabbed?.Invoke(this, EventArgs.Empty);
 
         b_isEquipped = true;
-        b_slotFull = true;
+        //b_slotFull = true;
 
         //Make weapon a child of the camera and move it to default position
 
         transform.SetParent(t_hand);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-
 
         //Make Rigidbody kinematic and BoxCollider a trigger
         rb_itemRigidbody.isKinematic = true;
@@ -98,9 +92,10 @@ public class GrabController : MonoBehaviour, IGrabbableItem
     public void DropItem()
     {
         OnItemDropped?.Invoke(this, EventArgs.Empty);
+        
 
         b_isEquipped = false;
-        b_slotFull = false;
+        //b_slotFull = false;
 
         //Set parent to null
         transform.SetParent(null);

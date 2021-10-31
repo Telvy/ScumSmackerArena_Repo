@@ -113,7 +113,7 @@ public class BaseWeaponShooterHitscan : MonoBehaviour
             Debug.Log(rayHit.collider.name);
 
             if (rayHit.collider.CompareTag("Enemy"))
-                rayHit.collider.GetComponent<TestDummy>().TakeDamage();
+                rayHit.collider.GetComponent<TestDummy>().TakeDamage(damage);
         }
 
         //ShakeCamera

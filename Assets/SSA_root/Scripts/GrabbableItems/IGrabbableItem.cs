@@ -13,7 +13,7 @@ using UnityEngine;
 //...
 public interface IGrabbableItem
 { 
-    void GrabItem();
+    void GrabItem(Transform t_hand);
 
     void UseItem();
 

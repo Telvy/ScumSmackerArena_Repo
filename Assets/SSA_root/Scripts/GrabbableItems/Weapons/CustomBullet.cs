@@ -16,7 +16,7 @@ public class CustomBullet : MonoBehaviour
     public LayerMask whatIsEnemies;
 
     //Stats
-    [Range(0f,1f)]
+    [Range(0f, 1f)]
     public float bounciness;
     public bool useGravity;
 
@@ -32,6 +32,11 @@ public class CustomBullet : MonoBehaviour
 
     int collisions;
     PhysicMaterial physics_mat;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void Start()
     {
@@ -60,7 +65,7 @@ public class CustomBullet : MonoBehaviour
             //Get component of enemy and call Take Damage
 
             //Just an example!
-            ///enemies[i].GetComponent<ShootingAi>().TakeDamage(explosionDamage);
+            enemies[i].GetComponent<TestDummy>().TakeDamage(explosionDamage);
 
             //Add explosion force (if enemy has a rigidbody)
             if (enemies[i].GetComponent<Rigidbody>())

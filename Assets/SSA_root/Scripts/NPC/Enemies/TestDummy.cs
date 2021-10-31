@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class TestDummy : MonoBehaviour
 {
-    public void TakeDamage()
+
+    private int health = 10;
+
+    
+
+    public void TakeDamage(int damage)
     {
-        Debug.Log("Test Dummy hit");
+        health -= damage;
+        Debug.Log(health);
+
+        if (health <= 0)
+        {
+            kill();
+        }
     }
 
-
-
+    public void kill()
+    {
+        this.gameObject.SetActive(false); 
+    }
 }
