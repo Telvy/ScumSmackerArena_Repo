@@ -15,9 +15,6 @@ public interface IGrabbableItem
 { 
     void GrabItem(Transform t_hand);
 
-    void UseItem();
-
     void DropItem();
 
-    void ThrowItem();
 }

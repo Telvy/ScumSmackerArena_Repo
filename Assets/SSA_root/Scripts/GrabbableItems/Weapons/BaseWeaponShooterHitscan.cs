@@ -63,13 +63,13 @@ public class BaseWeaponShooterHitscan : MonoBehaviour
         // text.SetText(bulletsLeft + " / " + magazineSize);
     }
 
-    private void GrabController_OnItemDropped(object sender, System.EventArgs e)
+    private void GrabController_OnItemDropped()
     {
         Debug.Log("Item Dropped!");
         canShoot = false;
     }
 
-    private void GrabController_OnItemGrabbed(object sender, System.EventArgs e)
+    private void GrabController_OnItemGrabbed()
     {
         Debug.Log("Item Grabbed!");
         canShoot = true;

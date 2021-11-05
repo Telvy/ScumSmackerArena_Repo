@@ -5,45 +5,23 @@ using UnityEngine;
 
 public class WeaponInventoryBase : MonoBehaviour
 {
-    public event EventHandler OnRightHandEquipped;
-    public event EventHandler OnLeftHandEquipped;
+    public event Action OnRightHandEquipped = delegate { };
+    public event Action OnLeftHandEquipped = delegate { };
 
-    public event EventHandler OnRightHandDequipped;
-    public event EventHandler OnLeftHandDequipped;
-
-    //public event EventHandler On
 
     [SerializeField] private float i_radius;
-
-    [SerializeField] private bool b_rightHandFull;
-    [SerializeField] private bool b_leftHandFull;
+    [SerializeField] public bool b_rightHandFull;
+    [SerializeField] public bool b_leftHandFull;
     [SerializeField] private LayerMask l_weapons;
-    [SerializeField] private Transform t_righthand, t_lefthand;
-    
+    [SerializeField] public Transform t_righthand, t_lefthand;
 
 
-    private void Awake()
-    {
-        
-    }
-
-    private void Start()
-    {
-        this.OnRightHandEquipped += WeaponInventoryBase_OnRightHandEquipped;
-        this.OnLeftHandEquipped += WeaponInventoryBase_OnLeftHandEquipped;
-        this.OnRightHandDequipped += WeaponInventoryBase_OnRightHandDequipped;
-        this.OnLeftHandDequipped += WeaponInventoryBase_OnLeftHandDequipped;
-
-
-    }
 
     private void Update()
     {
         CheckForItems();
         //PreventPickup();
     }
-
-  
 
     //checks for items within vicinity of the player
     private void CheckForItems()
@@ -52,55 +30,38 @@ public class WeaponInventoryBase : MonoBehaviour
         for (int i = 0; i < items.Length; i++)
         {
             GrabController grabController = items[0].GetComponent<GrabController>();
-            BaseWeaponShooterProjectile projectileShooter = items[0].GetComponent<BaseWeaponShooterProjectile>();
-            grabController.OnItemDropped += GrabController_OnItemDropped;
+            
 
             if (Input.GetKeyDown(KeyCode.E) && !b_rightHandFull)
             {
                 grabController.GrabItem(t_righthand);
-                projectileShooter.handSlot = BaseWeaponShooterProjectile.HandSlot.RightHand;
-                OnRightHandEquipped?.Invoke(this, EventArgs.Empty);
-
+                OnRightHandEquipped?.Invoke();
+                grabController.OnItemGrabbed += OnItemGrabbed_OnRightHandGrabbed;
+                grabController.OnItemDropped += OnItemDropped_OnRightHandDropped;
             }
-            else if (Input.GetKeyDown(KeyCode.Q) && !b_leftHandFull)
+
+            if (Input.GetKeyDown(KeyCode.Q) && !b_leftHandFull)
             {
                 grabController.GrabItem(t_lefthand);
-                projectileShooter.handSlot = BaseWeaponShooterProjectile.HandSlot.LeftHand;
-                OnLeftHandEquipped?.Invoke(this, EventArgs.Empty);
+                OnLeftHandEquipped?.Invoke();
+                grabController.OnItemGrabbed += OnItemGrabbed_OnLeftHandGrabbed;
             }
-
-          
         }
     }
 
-    private void WeaponInventoryBase_OnRightHandEquipped(object sender, System.EventArgs e)
+    private void OnItemGrabbed_OnRightHandGrabbed()
     {
-        OnRightHandDequipped?.Invoke(this, EventArgs.Empty);
         PreventRightHandGrab();
-        //this.OnRightHandEquipped -= WeaponInventoryBase_OnRightHandEquipped;
     }
 
-    private void WeaponInventoryBase_OnLeftHandEquipped(object sender, System.EventArgs e)
+    private void OnItemDropped_OnRightHandDropped()
     {
-        
+        ResetRightHandGrab();
+    }
+
+    private void OnItemGrabbed_OnLeftHandGrabbed()
+    {
         PreventLeftHandGrab();
-        //this.OnLeftHandEquipped -= WeaponInventoryBase_OnLeftHandEquipped;
-    }
-
-    private void GrabController_OnItemDropped(object sender, System.EventArgs e)
-    {
-        ResetRightHandGrab();
-        ResetLeftHandGrab();
-    }
-
-    private void WeaponInventoryBase_OnRightHandDequipped(object sender, System.EventArgs e)
-    {
-        ResetRightHandGrab();
-    }
-
-    private void WeaponInventoryBase_OnLeftHandDequipped(object sender, System.EventArgs e)
-    {
-        ResetLeftHandGrab();
     }
 
 
@@ -134,37 +95,17 @@ public class WeaponInventoryBase : MonoBehaviour
         return b_leftHandFull;
     }
 
-    private bool ResetRightHandGrab()
+    public bool ResetRightHandGrab()
     {
         return b_rightHandFull = false;
+        //b_rightHandFull = false;
     }
 
-    private bool ResetLeftHandGrab()
+    public bool ResetLeftHandGrab()
     {
         return b_leftHandFull = false;
+        //b_leftHandFull = false;
     }
-
-
-    //private void PreventPickup()
-    //{
-    //    if (t_righthand.transform.childCount > 0)
-    //    {
-    //        b_rightHandFull = true;
-    //    }
-    //    else
-    //    {
-    //        b_rightHandFull = false;
-    //    }
-
-    //    if (t_lefthand.transform.childCount > 0)
-    //    {
-    //        b_leftHandFull = true;
-    //    }
-    //    else
-    //    {
-    //        b_leftHandFull = false;
-    //    }
-    //}
 
     private void OnDrawGizmosSelected()
     {

@@ -6,8 +6,10 @@ using UnityEngine;
 public class GrabController : MonoBehaviour, IGrabbableItem
 {
     //Events for when an item is grabbed
-    public event EventHandler OnItemGrabbed;
-    public event EventHandler OnItemDropped;
+    public event Action OnItemGrabbed = delegate { };
+    public event Action OnItemDropped = delegate { };
+    public event Action OnItemUsed = delegate { };
+    public event Action OnItemThrown = delegate { };
 
 
     //[SerializeField] protected float f_pickupRange;
@@ -15,7 +17,6 @@ public class GrabController : MonoBehaviour, IGrabbableItem
     [SerializeField] protected float f_dropUpwardForce;
 
     private bool b_isEquipped;
-    
 
     private Rigidbody rb_itemRigidbody;
     private BoxCollider c_itemCollider;
@@ -45,29 +46,29 @@ public class GrabController : MonoBehaviour, IGrabbableItem
             c_itemCollider.isTrigger = true;
             //b_slotFull = true;
         }
-
-        
     }
 
     private void Update()
     {
-        SetWeaponPosition();
+       // SetWeaponPosition();
     }
 
-    private void SetWeaponPosition()
-    {
-        //Drop if equipped and "G" is pressed
-        if (b_isEquipped && Input.GetKeyDown(KeyCode.G))
-        {
-            DropItem();
-        }
-    }
+    //private void SetWeaponPosition()
+    //{
+    //    //Drop if equipped and "G" is pressed
+    //    if (b_isEquipped && Input.GetKeyDown(KeyCode.G))
+    //    {
+    //        DropItem();
+    //    }
+    //}
 
     public void GrabItem(Transform t_hand)
     {
-        OnItemGrabbed?.Invoke(this, EventArgs.Empty);
+        Debug.Log("Item Grabbed");
+        OnItemGrabbed?.Invoke();
 
         b_isEquipped = true;
+        c_itemCollider.enabled = false;
         //b_slotFull = true;
 
         //Make weapon a child of the camera and move it to default position
@@ -86,15 +87,16 @@ public class GrabController : MonoBehaviour, IGrabbableItem
 
     public void UseItem()
     {
-
+        OnItemUsed?.Invoke();
     }
 
     public void DropItem()
     {
-        OnItemDropped?.Invoke(this, EventArgs.Empty);
+        OnItemDropped?.Invoke();
         
 
         b_isEquipped = false;
+        c_itemCollider.enabled = true;
         //b_slotFull = false;
 
         //Set parent to null
@@ -120,7 +122,7 @@ public class GrabController : MonoBehaviour, IGrabbableItem
 
     public void ThrowItem()
     {
-
+        OnItemThrown?.Invoke();
     }
 
 }
