@@ -26,10 +26,10 @@ public class RightHandController : BaseHandController
 
     public override void DropCurrentItem()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && rightWeapon != null)
         {
+            weaponInventoryBase.ResetRightHandGrab();
             rightGrabController.DropItem();
-           
         }
     }
 

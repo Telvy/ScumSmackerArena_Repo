@@ -8,6 +8,7 @@ public class GrabController : MonoBehaviour, IGrabbableItem
     //Events for when an item is grabbed
     public event Action OnItemGrabbed = delegate { };
     public event Action OnItemDropped = delegate { };
+
     public event Action OnItemUsed = delegate { };
     public event Action OnItemThrown = delegate { };
 

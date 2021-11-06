@@ -35,34 +35,20 @@ public class WeaponInventoryBase : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && !b_rightHandFull)
             {
                 grabController.GrabItem(t_righthand);
-                OnRightHandEquipped?.Invoke();
-                grabController.OnItemGrabbed += OnItemGrabbed_OnRightHandGrabbed;
-                grabController.OnItemDropped += OnItemDropped_OnRightHandDropped;
+                PreventRightHandGrab();
+                OnRightHandEquipped?.Invoke();     
             }
 
             if (Input.GetKeyDown(KeyCode.Q) && !b_leftHandFull)
             {
                 grabController.GrabItem(t_lefthand);
-                OnLeftHandEquipped?.Invoke();
-                grabController.OnItemGrabbed += OnItemGrabbed_OnLeftHandGrabbed;
+                PreventLeftHandGrab();
+                OnLeftHandEquipped?.Invoke();    
             }
         }
     }
 
-    private void OnItemGrabbed_OnRightHandGrabbed()
-    {
-        PreventRightHandGrab();
-    }
-
-    private void OnItemDropped_OnRightHandDropped()
-    {
-        ResetRightHandGrab();
-    }
-
-    private void OnItemGrabbed_OnLeftHandGrabbed()
-    {
-        PreventLeftHandGrab();
-    }
+  
 
 
     //Note: How come the same logic behind PreventItemGrab() and PreventRightHand() the same, but the parameters for PreventItemGrab() doesn't make it work?
@@ -77,7 +63,7 @@ public class WeaponInventoryBase : MonoBehaviour
     //    return b_slotFull;
     //}
 
-    private bool PreventRightHandGrab()
+    public bool PreventRightHandGrab()
     {
         if (t_righthand.transform.childCount > 0)
         { 
@@ -86,7 +72,7 @@ public class WeaponInventoryBase : MonoBehaviour
         return b_rightHandFull;
     }
 
-    private bool PreventLeftHandGrab()
+    public bool PreventLeftHandGrab()
     {
         if (t_lefthand.transform.childCount > 0)
         { 
@@ -95,16 +81,16 @@ public class WeaponInventoryBase : MonoBehaviour
         return b_leftHandFull;
     }
 
-    public bool ResetRightHandGrab()
+    public void ResetRightHandGrab()
     {
-        return b_rightHandFull = false;
-        //b_rightHandFull = false;
+        
+        b_rightHandFull = false;
     }
 
-    public bool ResetLeftHandGrab()
+    public void ResetLeftHandGrab()
     {
-        return b_leftHandFull = false;
-        //b_leftHandFull = false;
+        
+        b_leftHandFull = false;
     }
 
     private void OnDrawGizmosSelected()
@@ -113,8 +99,6 @@ public class WeaponInventoryBase : MonoBehaviour
         Gizmos.DrawWireCube(transform.position,new Vector3(3,5,3));
         
     }
-
-
 }
 
 

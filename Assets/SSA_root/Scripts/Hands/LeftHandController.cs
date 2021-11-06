@@ -11,12 +11,13 @@ public class LeftHandController : BaseHandController
     public void Start()
     {
         weaponInventoryBase.OnLeftHandEquipped += OnCurrentItemEquipped;
-        //leftGrabController = GetComponentInChildren<GrabController>();
+        
     }
 
     public override void OnCurrentItemEquipped()
     {
         leftWeapon = GetComponentInChildren<BaseWeaponShooterProjectile>();
+        leftGrabController = GetComponentInChildren<GrabController>();
     }
     public override void OnCurrentItemDropped()
     {
@@ -30,8 +31,9 @@ public class LeftHandController : BaseHandController
 
     public override void DropCurrentItem()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H) && leftWeapon != null)
         {
+            weaponInventoryBase.ResetLeftHandGrab();
             leftGrabController.DropItem();
         }
     }
