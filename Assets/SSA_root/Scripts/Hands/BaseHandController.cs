@@ -5,7 +5,7 @@ using WeaponShooter;
 
 public class BaseHandController : MonoBehaviour
 {
-    [SerializeField] protected WeaponInventoryBase weaponInventoryBase = null;
+    protected WeaponInventoryBase weaponInventoryBase = null;
     
 
     public void Awake()

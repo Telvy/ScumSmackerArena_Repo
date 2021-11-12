@@ -5,31 +5,42 @@ using WeaponShooter;
 
 public class RightHandController : BaseHandController
 {
-    protected BaseWeaponShooterProjectile rightWeapon;
+    protected GameObject rWeaponObj;
+    protected BaseWeaponShooterProjectile rWeaponBaseShooterProj;
     protected GrabController rightGrabController;
 
 
     public void Start()
     {
         weaponInventoryBase.OnRightHandEquipped += OnCurrentItemEquipped;
+       
     }
     public override void OnCurrentItemEquipped()
     {
-        rightWeapon = GetComponentInChildren<BaseWeaponShooterProjectile>();
-        rightGrabController = GetComponentInChildren<GrabController>();
+        rWeaponObj = gameObject.transform.GetChild(0).gameObject;
+        rWeaponBaseShooterProj = rWeaponObj.GetComponent<BaseWeaponShooterProjectile>();
+        rightGrabController = rWeaponObj.GetComponent<GrabController>();
     }
 
     public override void UseCurrentItem()
     {
-        rightWeapon.MyInput(KeyCode.Mouse0);
+        rWeaponBaseShooterProj.MyInput(KeyCode.Mouse1);
     }
 
     public override void DropCurrentItem()
     {
-        if (Input.GetKeyDown(KeyCode.G) && rightWeapon != null)
+        if (rWeaponObj == null)
         {
-            weaponInventoryBase.ResetRightHandGrab();
-            rightGrabController.DropItem();
+            return;
+        }
+        else if(rWeaponObj != null)
+        {
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                weaponInventoryBase.ResetRightHandGrab();
+                rightGrabController.DropItem();
+                rWeaponObj = null;
+            }
         }
     }
 
@@ -37,11 +48,10 @@ public class RightHandController : BaseHandController
     {
         DropCurrentItem();
 
-        if (rightWeapon != null)
+        if (rWeaponObj != null)
         {
-            rightWeapon.MyInput(KeyCode.Mouse1);
+            UseCurrentItem();
         }
-
 
         //if (Input.GetMouseButton(1) && rightWeapon != null)
         //{

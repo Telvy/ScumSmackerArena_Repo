@@ -826,6 +826,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FPSWalker_Audio
       objectReference: {fileID: 0}
+    - target: {fileID: 5890336022911689035, guid: 1dd4ec9aeb88d4447a36e1145adbb99a, type: 3}
+      propertyPath: b_rightHandFull
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6378313381603985179, guid: 1dd4ec9aeb88d4447a36e1145adbb99a, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.2

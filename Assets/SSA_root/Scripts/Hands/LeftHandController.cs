@@ -5,7 +5,8 @@ using WeaponShooter;
 
 public class LeftHandController : BaseHandController
 {
-    protected BaseWeaponShooterProjectile leftWeapon;
+    protected GameObject lWeaponObj;
+    protected BaseWeaponShooterProjectile lWeaponBaseShooterProj;
     protected GrabController leftGrabController;
 
     public void Start()
@@ -16,8 +17,9 @@ public class LeftHandController : BaseHandController
 
     public override void OnCurrentItemEquipped()
     {
-        leftWeapon = GetComponentInChildren<BaseWeaponShooterProjectile>();
-        leftGrabController = GetComponentInChildren<GrabController>();
+        lWeaponObj = gameObject.transform.GetChild(0).gameObject;
+        lWeaponBaseShooterProj = lWeaponObj.GetComponent<BaseWeaponShooterProjectile>();
+        leftGrabController = lWeaponObj.GetComponent<GrabController>();
     }
     public override void OnCurrentItemDropped()
     {
@@ -26,15 +28,23 @@ public class LeftHandController : BaseHandController
 
     public override void UseCurrentItem()
     {
-        leftWeapon.MyInput(KeyCode.Mouse0);
+        lWeaponBaseShooterProj.MyInput(KeyCode.Mouse0);
     }
 
     public override void DropCurrentItem()
     {
-        if (Input.GetKeyDown(KeyCode.H) && leftWeapon != null)
+        if (lWeaponObj == null)
         {
-            weaponInventoryBase.ResetLeftHandGrab();
-            leftGrabController.DropItem();
+            return;
+        }
+        else if (lWeaponObj != null)
+        {
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                weaponInventoryBase.ResetLeftHandGrab();
+                leftGrabController.DropItem();
+                lWeaponObj = null;
+            }
         }
     }
 
@@ -42,16 +52,9 @@ public class LeftHandController : BaseHandController
     {
         DropCurrentItem();
 
-        if (leftWeapon != null)
+        if (lWeaponObj != null)
         {
-            leftWeapon.MyInput(KeyCode.Mouse0);
-        }
-
-
-        if (Input.GetMouseButton(1) && leftWeapon != null)
-        {
-            //UseItem();
-            Debug.Log("Right Weapon Fired");
+            UseCurrentItem();
         }
     }
 
