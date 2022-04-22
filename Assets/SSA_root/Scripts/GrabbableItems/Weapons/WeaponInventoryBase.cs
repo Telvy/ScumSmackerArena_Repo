@@ -8,14 +8,11 @@ public class WeaponInventoryBase : MonoBehaviour
     public event Action OnRightHandEquipped = delegate { };
     public event Action OnLeftHandEquipped = delegate { };
 
-
     [SerializeField] private float i_radius;
     [SerializeField] public bool b_rightHandFull;
     [SerializeField] public bool b_leftHandFull;
     [SerializeField] private LayerMask l_weapons;
     [SerializeField] public Transform t_righthand, t_lefthand;
-
-
 
     private void Update()
     {
